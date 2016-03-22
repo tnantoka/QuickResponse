@@ -35,14 +35,19 @@ class QuickResponseTests: XCTestCase {
     
     func testCode() {
         let urlString = "http://example.com/"
-        
+        XCTAssertEqual(readCode(QuickResponse.code(urlString)), urlString)
+        XCTAssertEqual(readCode(QuickResponse(message: urlString).scaled(2.0).leveled(.H).code), urlString)
+    }
+    
+    private func readCode(image: UIImage) -> String {
         let detector = CIDetector(
             ofType: CIDetectorTypeQRCode,
             context: nil,
             options: [CIDetectorAccuracy: CIDetectorAccuracyHigh]
         )
-        let features = detector.featuresInImage(QuickResponse(message: urlString).code.CIImage!) as! [CIQRCodeFeature]
+
+        let features = detector.featuresInImage(image.CIImage!) as! [CIQRCodeFeature]
         let message = features.reduce("") { $0 + $1.messageString }
-        XCTAssertEqual(message, urlString)
+        return message
     }
 }

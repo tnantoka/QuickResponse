@@ -48,6 +48,10 @@ public struct QuickResponse {
     public var code: UIImage {
         return uiImage
     }
+    
+    static public func code(message: String) -> UIImage {
+        return QuickResponse(message: message).code
+    }
 }
 
 extension QuickResponse {
